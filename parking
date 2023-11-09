@@ -1,0 +1,44 @@
+import random
+
+class Car:
+    def __init__(self, license_plate):
+        self.license_plate = license_plate
+
+    def __str__(self):
+        return self.license_plate
+
+    def park(self, parking_lot, spot):
+        if parking_lot[spot] is None:
+            parking_lot[spot] = self
+            return f"Car with license plate {self.license_plate} parked successfully in spot {spot}"
+        else:
+            return f"Car with license plate {self.license_plate} could not park in spot {spot} (occupied)"
+
+class ParkingLot:
+    def __init__(self, square_footage, spot_size):
+        self.spot_size = spot_size
+        self.total_spots = square_footage // spot_size
+        self.parking_lot = [None] * self.total_spots
+
+    def park_car(self, car):
+        for _ in range(len(self.parking_lot)):
+            spot = random.randint(0, len(self.parking_lot) - 1)
+            result = car.park(self.parking_lot, spot)
+            print(result)
+            if "successfully" in result:
+                return
+        print(f"Parking lot is full. Car with license plate {car.license_plate} could not park.")
+
+def main():
+    # Create a parking lot with 2000 sq. ft and 8x12 spot size (96 sq. ft).
+    parking_lot = ParkingLot(2000, 96)
+
+    # Generate cars with random license plates.
+    cars = [Car(f'{random.randint(1000000, 9999999)}') for _ in range(20)]
+
+    # Attempt to park cars in the parking lot.
+    for car in cars:
+        parking_lot.park_car(car)
+
+if __name__ == "__main__":
+    main()
